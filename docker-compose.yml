@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  back-api:
+    container_name: back-api
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: AutoSupportAPI/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      
+  postgres-db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    #volumes:
+      #- pgdata:/var/lib/postgresql/data
+      # - ./../sql/DbGenerator.sql:/docker-entrypoint-initdb.d/DbGenerator.sql
+    environment:
+      - POSTGRES_USER=pgtest
+      - POSTGRES_DB=pgtest
+      - POSTGRES_PASSWORD=pgtest
+      #- DB_CONNECTION_STRING="host=192.168.112.2;port=5432;database=pgtest;username=pgtest;password=pgtest"
+  #redis:
+   # image: redis:latest
+    #restart: always
+    #ports:
+     # - "6379:6379"
+    #volumes:
+    #  - /home/valentine/Redis/data:/root/redis
+    #  - /home/valentine/Redis/redis.conf:/usr/local/etc/redis/redis.conf
+    # environment:
+    #  - REDIS_PASSWORD=my-password
+    #  - REDIS_PORT=6379
