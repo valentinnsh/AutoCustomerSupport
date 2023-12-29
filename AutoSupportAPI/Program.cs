@@ -1,3 +1,4 @@
+using AutoSupportAPI.Services;
 using Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

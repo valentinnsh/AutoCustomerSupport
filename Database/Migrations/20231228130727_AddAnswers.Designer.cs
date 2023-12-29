@@ -2,6 +2,7 @@
 using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Database.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    partial class PostgresDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228130727_AddAnswers")]
+    partial class AddAnswers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,16 +50,6 @@ namespace Database.Migrations
                         {
                             Id = 2L,
                             Answer = "MaybeMaybe"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Answer = "MoreAnswers"
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Answer = "MoreAnswers 2"
                         });
                 });
 
@@ -96,22 +89,8 @@ namespace Database.Migrations
                         new
                         {
                             Id = 2L,
-                            AnswerId = 2L,
+                            AnswerId = 1L,
                             QuestionId = 1L,
-                            Rank = 1
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            AnswerId = 2L,
-                            QuestionId = 2L,
-                            Rank = 2
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            AnswerId = 4L,
-                            QuestionId = 2L,
                             Rank = 1
                         });
                 });
@@ -137,11 +116,6 @@ namespace Database.Migrations
                         {
                             Id = 1L,
                             Question = "Did it work?"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Question = "Will I finish in time?"
                         });
                 });
 

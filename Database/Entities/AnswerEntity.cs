@@ -2,8 +2,8 @@ using Database.Records;
 
 namespace Database.Entities;
 
-public class QuestionEntity : QuestionRecord
+public class AnswerEntity  : AnswerRecord
 {
-    public List<AnswerEntity> Answers { get; } = [];
+    public List<QuestionEntity> Questions { get; } = [];
     public List<QuestionAnswerEntity> QuestionAnswers { get; } = [];
 }

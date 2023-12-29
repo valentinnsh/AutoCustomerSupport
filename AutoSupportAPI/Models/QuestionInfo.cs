@@ -11,10 +11,7 @@ public class QuestionInfo
     
     [DataMember] 
     public string Question { get; set; }
-
-    public QuestionInfo(QuestionEntity entity)
-    {
-        Id = entity.Id;
-        Question = entity.Question;
-    }
+    
+    [DataMember]
+    public List<string> Answers { get; set; }
 }
