@@ -6,3 +6,7 @@ riderModule.iml
 .env
 
 .idea/
+
+Data/
+
+*.sql
