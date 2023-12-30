@@ -7,6 +7,7 @@ public class GenerateSeed
     [Test]
     public void GenerateSeedSql()
     {
-        SeedGenerator.GenerateSeedQuestionsSql("/home/valentine/dev/AutoCustomerSupport/Data/generated_training_data.jsonl");
+        const string dataJsonl = "/home/valentine/dev/AutoCustomerSupport/Data/generated_training_data.jsonl";
+        SeedGenerator.GenerateAndWriteSeedScriptsToFile(dataJsonl, true);
     }
 }

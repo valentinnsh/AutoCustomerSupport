@@ -20,4 +20,15 @@ public class QuestionsController
         if (question is null) return new NotFoundResult();
         return new OkObjectResult(question);
     }
+    
+    [HttpGet("redis/{questionText}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetQuestionByIdAsync([FromRoute] string questionText,
+        [FromServices] IQuestionService service,
+        CancellationToken token)
+    {
+        var question = await service.GetAnswersFromRedisAsync(questionText, token);
+        if (question is null) return new NotFoundResult();
+        return new OkObjectResult(question);
+    }
 }

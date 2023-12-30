@@ -7,7 +7,7 @@ public static class SeedGenerator
 {
     public const string DataFilename = "generated_training_data.jsonl";
 
-    public static void GenerateSeedQuestionsSql(string filename)
+    public static void GenerateAndWriteSeedScriptsToFile(string filename, bool test = true)
     {
         var data = new List<Root>();
         using (StreamReader file = File.OpenText(filename))
@@ -19,36 +19,36 @@ public static class SeedGenerator
             }
         }
 
-        var questions = data.Select(_ => _.question).Distinct().ToList();
-        var answers = data.Select(_ => _.answer).Distinct().ToList();
-        Console.WriteLine(GenerateSqlString(questions.Slice(1,10), answers.Slice(1,10)));
+        var (sql, redis) = GenerateSeedStrings(test ? data.Slice(1,10) : data);
+        const string sqlFilepath = $"/home/valentine/dev/AutoCustomerSupport/Data/seed_postgres_test.sql";
+        using (var writer = new StreamWriter(sqlFilepath)) writer.Write(sql);
+        
+        const string redisFilepath = $"/home/valentine/dev/AutoCustomerSupport/Data/seed_redis_test.txt";
+        using (var writer = new StreamWriter(redisFilepath)) writer.Write(redis);
     }
 
-    private static string GenerateSqlString(List<string> questions, List<string> answers)
+    private static (string,string) GenerateSeedStrings(List<Root> data)
     {
         var sql = new System.Text.StringBuilder();
+        var redis = new System.Text.StringBuilder();
         sql.AppendLine("START TRANSACTION;");
         
-        // Add questions
-        sql.AppendLine("INSERT INTO questions (\"Question\")");
-        sql.Append("VALUES ");
-        foreach (var question in questions)
+        var questions = new Dictionary<long, string>();
+        var answers = new Dictionary<long, string>();
+
+        foreach (var record in data)
         {
-            sql.AppendLine($"(\'{question.Replace("'", "''")}\'){(questions.IndexOf(question) != questions.Count-1 ? ',' : ';')}");
-        }
-        
-        // Add Answers
-        sql.AppendLine("INSERT INTO answers (\"Answer\")");
-        sql.Append("VALUES ");
-        foreach (var answer in answers)
-        {
-            sql.AppendLine($"(\'{answer.Replace("'", "''")}\'){(answers.IndexOf(answer) != answers.Count-1 ? ',' : ';')}");
+            if (questions.TryAdd(data.IndexOf(record), record.question))
+                sql.AppendLine($"INSERT INTO questions (\"Question\") VALUES (\'{record.question.Replace("'", "''")}\');");
+            if (answers.TryAdd(data.IndexOf(record), record.answer))
+                sql.AppendLine($"INSERT INTO answers (\"Answer\") VALUES (\'{record.answer.Replace("'", "''")}\');");
+
         }
 
         // Add QuestionAnswers
         var random = new Random();
         
-        var ranking = new Dictionary<long, List<long>>();
+        var ranking = new Dictionary<(long, string), List<long>>();
         foreach (var question in questions)
         {
             var ranks = Enumerable.Range(1, random.Next(1, 7))
@@ -57,10 +57,8 @@ public static class SeedGenerator
                     long value = random.Next(1, answers.Count);
                     return value;
                 })
-                .ToList();  
-            // Add to ranking
-            var indexOf = questions.IndexOf(question)+1;
-            ranking.Add(indexOf, ranks);
+                .ToList();
+            ranking.Add((question.Key, question.Value), ranks);
         }
 
 
@@ -71,15 +69,22 @@ public static class SeedGenerator
             {
                 sql.AppendLine("INSERT INTO \"QuestionAnswerEntity\" (\"QuestionId\", \"AnswerId\", \"Rank\")");
                 sql.Append("VALUES ");
-                sql.AppendLine($"({qa.Key}, {rank}, {qa.Value.IndexOf(rank)+1});");
-                // sql.AppendLine($"(\'{answer}\'){(answers.IndexOf(answer) != answers.Count-1 ? ',' : ';')}");
+                sql.AppendLine($"({qa.Key.Item1}, {rank}, {qa.Value.IndexOf(rank)+1});");
             }
+
+            // var ans = answers.Where(_ => _.Key);
+            var ans = answers
+                .Where(kv => qa.Value.Contains(kv.Key))
+                .OrderBy(kv => qa.Value.IndexOf(kv.Key))
+                .Select(kv => $"\"{kv.Value.Replace("'", "")}\"")
+                .ToList();
+            redis.AppendLine($"hset questions '{qa.Key.Item2.Replace("'", "")}' '[{string.Join(", ", ans)}]'");
         }
         // Fin
         sql.AppendLine("COMMIT;");
-        return sql.ToString();
+        return (sql.ToString(), redis.ToString());
     }
-    
+
     internal class Metadata
     {
         public int answer_start { get; set; }

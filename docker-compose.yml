@@ -25,14 +25,13 @@ services:
       - POSTGRES_DB=pgtest
       - POSTGRES_PASSWORD=pgtest
       #- DB_CONNECTION_STRING="host=192.168.112.2;port=5432;database=pgtest;username=pgtest;password=pgtest"
-  #redis:
-   # image: redis:latest
-    #restart: always
-    #ports:
-     # - "6379:6379"
-    #volumes:
-    #  - /home/valentine/Redis/data:/root/redis
-    #  - /home/valentine/Redis/redis.conf:/usr/local/etc/redis/redis.conf
-    # environment:
-    #  - REDIS_PASSWORD=my-password
-    #  - REDIS_PORT=6379
+  redis:
+    image: redis/redis-stack
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./Data/seed_redis_test.txt:/tmp/seed.txt
+    environment:
+      - REDIS_PASSWORD=my-password
+      - REDIS_PORT=6379
