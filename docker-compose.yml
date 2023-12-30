@@ -17,14 +17,13 @@ services:
     restart: always
     ports:
       - "5432:5432"
-    #volumes:
-      #- pgdata:/var/lib/postgresql/data
-      # - ./../sql/DbGenerator.sql:/docker-entrypoint-initdb.d/DbGenerator.sql
+    volumes: 
+      - ./Data/seed_postgres_test.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
     environment:
       - POSTGRES_USER=pgtest
       - POSTGRES_DB=pgtest
       - POSTGRES_PASSWORD=pgtest
-      #- DB_CONNECTION_STRING="host=192.168.112.2;port=5432;database=pgtest;username=pgtest;password=pgtest"
+
   redis:
     image: redis/redis-stack
     restart: always
@@ -32,6 +31,9 @@ services:
       - "6379:6379"
     volumes:
       - ./Data/seed_redis_test.txt:/tmp/seed.txt
+    #volumes:
+      #- ./Data/Redis:/Redis
+    #entrypoint: sh -c /Redis/seed_redis.sh
     environment:
       - REDIS_PASSWORD=my-password
       - REDIS_PORT=6379

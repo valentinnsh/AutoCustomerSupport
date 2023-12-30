@@ -36,28 +36,6 @@ namespace Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("answers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Answer = "No, FU"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Answer = "MaybeMaybe"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Answer = "MoreAnswers"
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Answer = "MoreAnswers 2"
-                        });
                 });
 
             modelBuilder.Entity("Database.Entities.QuestionAnswerEntity", b =>
@@ -83,37 +61,7 @@ namespace Database.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("QuestionAnswerEntity");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            AnswerId = 1L,
-                            QuestionId = 1L,
-                            Rank = 2
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            AnswerId = 2L,
-                            QuestionId = 1L,
-                            Rank = 1
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            AnswerId = 2L,
-                            QuestionId = 2L,
-                            Rank = 2
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            AnswerId = 4L,
-                            QuestionId = 2L,
-                            Rank = 1
-                        });
+                    b.ToTable("QuestionAnswerEntity", (string)null);
                 });
 
             modelBuilder.Entity("Database.Entities.QuestionEntity", b =>
@@ -131,18 +79,6 @@ namespace Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("questions", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Question = "Did it work?"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Question = "Will I finish in time?"
-                        });
                 });
 
             modelBuilder.Entity("Database.Entities.QuestionAnswerEntity", b =>

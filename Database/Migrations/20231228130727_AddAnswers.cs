@@ -53,24 +53,6 @@ namespace Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "answers",
-                columns: new[] { "Id", "Answer" },
-                values: new object[,]
-                {
-                    { 1L, "No, FU" },
-                    { 2L, "MaybeMaybe" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "QuestionAnswerEntity",
-                columns: new[] { "Id", "AnswerId", "QuestionId", "Rank" },
-                values: new object[,]
-                {
-                    { 1L, 1L, 1L, 2 },
-                    { 2L, 1L, 1L, 1 }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionAnswerEntity_AnswerId",
                 table: "QuestionAnswerEntity",

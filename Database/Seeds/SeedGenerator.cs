@@ -5,8 +5,6 @@ namespace Database.Seeds;
 
 public static class SeedGenerator
 {
-    public const string DataFilename = "generated_training_data.jsonl";
-
     public static void GenerateAndWriteSeedScriptsToFile(string filename, bool test = true)
     {
         var data = new List<Root>();
@@ -69,10 +67,9 @@ public static class SeedGenerator
             {
                 sql.AppendLine("INSERT INTO \"QuestionAnswerEntity\" (\"QuestionId\", \"AnswerId\", \"Rank\")");
                 sql.Append("VALUES ");
-                sql.AppendLine($"({qa.Key.Item1}, {rank}, {qa.Value.IndexOf(rank)+1});");
+                sql.AppendLine($"({qa.Key.Item1+1}, {rank}, {qa.Value.IndexOf(rank)+1});");
             }
 
-            // var ans = answers.Where(_ => _.Key);
             var ans = answers
                 .Where(kv => qa.Value.Contains(kv.Key))
                 .OrderBy(kv => qa.Value.IndexOf(kv.Key))

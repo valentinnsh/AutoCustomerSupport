@@ -39,13 +39,6 @@ namespace Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("questions", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Question = "Did it work?"
-                        });
                 });
 #pragma warning restore 612, 618
         }

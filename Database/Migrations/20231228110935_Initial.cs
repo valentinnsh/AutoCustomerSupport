@@ -23,11 +23,6 @@ namespace Database.Migrations
                 {
                     table.PrimaryKey("PK_questions", x => x.Id);
                 });
-
-            migrationBuilder.InsertData(
-                table: "questions",
-                columns: new[] { "Id", "Question" },
-                values: new object[] { 1L, "Did it work?" });
         }
 
         /// <inheritdoc />
