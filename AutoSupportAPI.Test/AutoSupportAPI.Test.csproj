@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AutoSupportAPI\AutoSupportAPI.csproj" />
       <ProjectReference Include="..\Database\Database.csproj" />
     </ItemGroup>
 

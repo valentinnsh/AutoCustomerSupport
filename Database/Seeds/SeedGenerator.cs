@@ -17,7 +17,7 @@ public static class SeedGenerator
             }
         }
 
-        var (sql, redis) = GenerateSeedStrings(test ? data.Slice(1,10) : data);
+        var (sql, redis) = GenerateSeedStrings(test ? data.Slice(1,1000) : data);
         const string sqlFilepath = $"/home/valentine/dev/AutoCustomerSupport/Data/seed_postgres_test.sql";
         using (var writer = new StreamWriter(sqlFilepath)) writer.Write(sql);
         
